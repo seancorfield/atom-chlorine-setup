@@ -1,0 +1,72 @@
+"*":
+  core:
+    autoHideMenuBar: true
+    openEmptyEditorOnStart: false
+    packagesWithKeymapsDisabled: [
+      "lisp-paredit"
+    ]
+    telemetryConsent: "limited"
+    themes: [
+      "one-light-ui"
+      "one-light-syntax"
+    ]
+  "disable-keybindings":
+    allCommunityPackages: true
+    bundledPackages: [
+      "go-to-line"
+      "bracket-matcher"
+    ]
+    exceptCommunityPackages: [
+      "emacs-plus"
+      "proto-repl"
+      "git-plus"
+    ]
+    prefixKeys: [
+      "ctrl-k"
+    ]
+  editor:
+    autoIndentOnPaste: false
+    scrollPastEnd: true
+  "exception-reporting":
+    userId: "46572260-1841-536d-add8-49defe64da90"
+  "lisp-paredit":
+    indentationForms: [
+      "try"
+      "catch"
+      "finally"
+      "let"
+      "are"
+      "/^def.*/"
+      "fn"
+      "cond"
+      "if"
+      "if-let"
+      "for"
+      "/when.*/"
+      "testing"
+      "doseq"
+      "dotimes"
+      "loop"
+      "ns"
+      "do"
+      "/with/"
+    ]
+    strict: false
+  "proto-repl":
+    autoPrettyPrint: true
+    bootArgs: "--no-colors cider repl --server wait"
+    bootPath: "c:\\lein\\boot.exe"
+    displayExecutedCodeInRepl: false
+    displayHelpText: false
+    openReplInRightPane: false
+    refreshBeforeRunningSingleTest: false
+    refreshBeforeRunningTestFile: false
+    refreshOnReplStart: false
+  welcome:
+    showOnStartup: false
+".clojure.source":
+  editor:
+    autoIndent: false
+    autoIndentOnPaste: false
+    nonWordCharacters: "()\"':,;~@#$%^&{}[]`"
+    scrollPastEnd: true
