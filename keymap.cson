@@ -188,8 +188,8 @@
 
   'ctrl-alt-i':         'lisp-paredit:indent'
 
-  'ctrl-right':         'lisp-paredit:forward-sexp'
-  'ctrl-left':          'lisp-paredit:backward-sexp'
+  'ctrl-alt-right':         'lisp-paredit:forward-sexp'
+  'ctrl-alt-left':          'lisp-paredit:backward-sexp'
   'ctrl-up':            'lisp-paredit:up-sexp'
   'ctrl-down':          'lisp-paredit:down-sexp'
   'ctrl-=':             'lisp-paredit:expand-selection'
