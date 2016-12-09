@@ -33,7 +33,7 @@
   'cmd-alt-ctrl-w': 'editor:toggle-soft-wrap'
   'alt-backspace': 'editor:delete-to-previous-word-boundary'
   'alt-delete': 'editor:delete-to-next-word-boundary'
-  'ctrl-d': 'proto-repl:exit-repl'
+#  'ctrl-d': 'proto-repl:exit-repl'
   'cmd-l':  'go-to-line:toggle'
   'ctrl-l': 'proto-repl:clear-repl'
 
