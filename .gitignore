@@ -5,3 +5,4 @@ compile-cache
 storage
 packages
 config.cson
+github.cson
