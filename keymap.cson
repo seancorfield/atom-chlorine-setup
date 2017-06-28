@@ -30,6 +30,15 @@
 # If you are unfamiliar with CSON, you can read more about it in the
 # Atom Flight Manual:
 # http://flight-manual.atom.io/using-atom/sections/basic-customization/#_cson
+
+# conveniences:
+'atom-workspace':
+  'ctrl-cmd-o':         'advanced-open-file:toggle'
+
+'.platform-darwin atom-text-editor[data-grammar~="clojure"].autocomplete-active':
+  'enter':          'autocomplete-plus:confirm'
+
+# paredit, modified to avoid conflicts with protorepl:
 'atom-text-editor[data-grammar~="clojure"],
  atom-text-editor[data-grammar~="lisp"],
  atom-text-editor[data-grammar~="newlisp"],
