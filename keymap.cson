@@ -49,6 +49,7 @@
   'ctrl-, s':       'sean:inspect-selection'
   'ctrl-, D':       'chlorine:source-for-var'
   'ctrl-, d':       'chlorine:doc-for-var'
+  'ctrl-, n':       'sean:inspect-ns'
   'ctrl-, v':       'sean:inspect-var'
   'ctrl-, x':       'chlorine:run-tests-in-ns'
   'ctrl-, t':       'chlorine:run-test-for-var'

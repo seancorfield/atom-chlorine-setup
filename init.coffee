@@ -79,3 +79,16 @@ atom.commands.add 'atom-text-editor', 'sean:inspect-var', ->
     editor.getSelectedBufferRange(),
     wrap_in_rebl_submit("#'" + EditorUtils.getClojureVarUnderCursor(editor))
   )
+
+# Inspect editor's current namespace in REBL (as a Var so you can navigate it).
+atom.commands.add 'atom-text-editor', 'sean:inspect-ns', ->
+  editor = atom.workspace.getActiveTextEditor()
+  chlorine = atom.packages.getLoadedPackage('chlorine').mainModule
+  ns = EditorUtils.findNsDeclaration(editor)
+  chlorine.repl.eval_and_present(
+    editor,
+    ns,
+    editor.getPath(),
+    editor.getSelectedBufferRange(),
+    wrap_in_rebl_submit("(find-ns '" + ns + ")")
+  )
