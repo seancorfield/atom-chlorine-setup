@@ -68,6 +68,18 @@ atom.commands.add 'atom-text-editor', 'sean:inspect-selection', ->
     wrap_in_rebl_submit(editor.getSelectedText())
   )
 
+# Turn varname (expr) into a top-level def to make debugging easier.
+atom.commands.add 'atom-text-editor', 'sean:def-binding', ->
+  editor = atom.workspace.getActiveTextEditor()
+  chlorine = atom.packages.getLoadedPackage('chlorine').mainModule
+  chlorine.repl.eval_and_present(
+    editor,
+    EditorUtils.findNsDeclaration(editor),
+    editor.getPath(),
+    editor.getSelectedBufferRange(),
+    wrap_in_rebl_submit("(def " + editor.getSelectedText() + ")")
+  )
+
 # Send Var at cursor to REBL (as a Var so you can navigate it).
 atom.commands.add 'atom-text-editor', 'sean:inspect-var', ->
   editor = atom.workspace.getActiveTextEditor()
