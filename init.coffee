@@ -47,15 +47,35 @@ atom.commands.add 'atom-text-editor', 'jason:delete-sexp', ->
   atom.commands.dispatch(atom.views.getView(editor), 'lisp-paredit:expand-selection')
   atom.commands.dispatch(atom.views.getView(editor), 'core:delete')
 
-# Indents the top level sexp.
-atom.commands.add 'atom-text-editor', 'jason:indent-top-sexp', ->
-  maintainingCursorPosition ->
-    editor = atom.workspace.getActiveTextEditor()
-    range = protoRepl.EditorUtils.getCursorInClojureTopBlockRange(editor)
-    # Work around a lisp paredit bug where it can't indent a range if selected from the very beginning of the file
-    start = range.start
-    if start.column == 0 && start.row == 0
-      start.column = 1
+wrap_in_rebl_submit = (code) ->
+  "(let [value " + code + "] " +
+    "(try" +
+    "  ((requiring-resolve 'cognitect.rebl/submit) '" + code + " value)" +
+    "  (catch Throwable _))" +
+    " value)"
 
-    editor.setSelectedScreenRange(range)
-    atom.commands.dispatch(atom.views.getView(editor), 'lisp-paredit:indent')
+EditorUtils = require("./packages/chlorine/lib/editor-utils")
+
+# Like Chlorine's evaluate-selection, but sends it to REBL.
+atom.commands.add 'atom-text-editor', 'sean:inspect-selection', ->
+  editor = atom.workspace.getActiveTextEditor()
+  chlorine = atom.packages.getLoadedPackage('chlorine').mainModule
+  chlorine.repl.eval_and_present(
+    editor,
+    EditorUtils.findNsDeclaration(editor),
+    editor.getPath(),
+    editor.getSelectedBufferRange(),
+    wrap_in_rebl_submit(editor.getSelectedText())
+  )
+
+# Send Var at cursor to REBL (as a Var so you can navigate it).
+atom.commands.add 'atom-text-editor', 'sean:inspect-var', ->
+  editor = atom.workspace.getActiveTextEditor()
+  chlorine = atom.packages.getLoadedPackage('chlorine').mainModule
+  chlorine.repl.eval_and_present(
+    editor,
+    EditorUtils.findNsDeclaration(editor),
+    editor.getPath(),
+    editor.getSelectedBufferRange(),
+    wrap_in_rebl_submit("#'" + EditorUtils.getClojureVarUnderCursor(editor))
+  )
