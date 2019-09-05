@@ -56,6 +56,32 @@ wrap_in_rebl_submit = (code) ->
 
 EditorUtils = require("./packages/chlorine/lib/editor-utils")
 
+# Like Chlorine's evaluate-top-block, but sends it to REBL.
+atom.commands.add 'atom-text-editor', 'sean:inspect-top-block', ->
+  editor = atom.workspace.getActiveTextEditor()
+  chlorine = atom.packages.getLoadedPackage('chlorine').mainModule
+  range = EditorUtils.getCursorInBlockRange(editor,{topLevel:true})
+  chlorine.repl.eval_and_present(
+    editor,
+    EditorUtils.findNsDeclaration(editor),
+    editor.getPath(),
+    range,
+    wrap_in_rebl_submit(editor.getTextInBufferRange(range))
+  )
+
+# Like Chlorine's evaluate-block, but sends it to REBL.
+atom.commands.add 'atom-text-editor', 'sean:inspect-block', ->
+  editor = atom.workspace.getActiveTextEditor()
+  chlorine = atom.packages.getLoadedPackage('chlorine').mainModule
+  range = EditorUtils.getCursorInBlockRange(editor)
+  chlorine.repl.eval_and_present(
+    editor,
+    EditorUtils.findNsDeclaration(editor),
+    editor.getPath(),
+    range,
+    wrap_in_rebl_submit(editor.getTextInBufferRange(range))
+  )
+
 # Like Chlorine's evaluate-selection, but sends it to REBL.
 atom.commands.add 'atom-text-editor', 'sean:inspect-selection', ->
   editor = atom.workspace.getActiveTextEditor()
