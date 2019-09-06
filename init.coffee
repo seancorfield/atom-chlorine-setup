@@ -56,77 +56,62 @@ wrap_in_rebl_submit = (code) ->
 
 EditorUtils = require("./packages/chlorine/lib/editor-utils")
 
-# Like Chlorine's evaluate-top-block, but sends it to REBL.
-atom.commands.add 'atom-text-editor', 'sean:inspect-top-block', ->
+wrapped_eval = (ranger, selector, wrapper) ->
   editor = atom.workspace.getActiveTextEditor()
   chlorine = atom.packages.getLoadedPackage('chlorine').mainModule
-  range = EditorUtils.getCursorInBlockRange(editor,{topLevel:true})
+  range = ranger(editor)
   chlorine.repl.eval_and_present(
     editor,
     EditorUtils.findNsDeclaration(editor),
     editor.getPath(),
     range,
-    wrap_in_rebl_submit(editor.getTextInBufferRange(range))
+    wrapper(selector(editor,range))
+  )
+
+# Like Chlorine's evaluate-top-block, but sends it to REBL.
+atom.commands.add 'atom-text-editor', 'sean:inspect-top-block', ->
+  wrapped_eval(
+    (editor) -> EditorUtils.getCursorInBlockRange(editor,{topLevel:true}),
+    (editor,range) -> editor.getTextInBufferRange(range),
+    (code) -> wrap_in_rebl_submit(code)
   )
 
 # Like Chlorine's evaluate-block, but sends it to REBL.
 atom.commands.add 'atom-text-editor', 'sean:inspect-block', ->
-  editor = atom.workspace.getActiveTextEditor()
-  chlorine = atom.packages.getLoadedPackage('chlorine').mainModule
-  range = EditorUtils.getCursorInBlockRange(editor)
-  chlorine.repl.eval_and_present(
-    editor,
-    EditorUtils.findNsDeclaration(editor),
-    editor.getPath(),
-    range,
-    wrap_in_rebl_submit(editor.getTextInBufferRange(range))
+  wrapped_eval(
+    (editor) -> EditorUtils.getCursorInBlockRange(editor),
+    (editor,range) -> editor.getTextInBufferRange(range),
+    (code) -> wrap_in_rebl_submit(code)
   )
 
 # Like Chlorine's evaluate-selection, but sends it to REBL.
 atom.commands.add 'atom-text-editor', 'sean:inspect-selection', ->
-  editor = atom.workspace.getActiveTextEditor()
-  chlorine = atom.packages.getLoadedPackage('chlorine').mainModule
-  chlorine.repl.eval_and_present(
-    editor,
-    EditorUtils.findNsDeclaration(editor),
-    editor.getPath(),
-    editor.getSelectedBufferRange(),
-    wrap_in_rebl_submit(editor.getSelectedText())
+  wrapped_eval(
+    (editor) -> editor.getSelectedBufferRange(),
+    (editor,_) -> editor.getSelectedText(),
+    (code) -> wrap_in_rebl_submit(code)
   )
 
 # Turn varname (expr) into a top-level def to make debugging easier.
 atom.commands.add 'atom-text-editor', 'sean:def-binding', ->
-  editor = atom.workspace.getActiveTextEditor()
-  chlorine = atom.packages.getLoadedPackage('chlorine').mainModule
-  chlorine.repl.eval_and_present(
-    editor,
-    EditorUtils.findNsDeclaration(editor),
-    editor.getPath(),
-    editor.getSelectedBufferRange(),
-    wrap_in_rebl_submit("(def " + editor.getSelectedText() + ")")
+  wrapped_eval(
+    (editor) -> editor.getSelectedBufferRange(),
+    (editor,_) -> editor.getSelectedText(),
+    (code) -> wrap_in_rebl_submit("(def " + code + ")")
   )
 
 # Send Var at cursor to REBL (as a Var so you can navigate it).
 atom.commands.add 'atom-text-editor', 'sean:inspect-var', ->
-  editor = atom.workspace.getActiveTextEditor()
-  chlorine = atom.packages.getLoadedPackage('chlorine').mainModule
-  chlorine.repl.eval_and_present(
-    editor,
-    EditorUtils.findNsDeclaration(editor),
-    editor.getPath(),
-    editor.getSelectedBufferRange(),
-    wrap_in_rebl_submit("#'" + EditorUtils.getClojureVarUnderCursor(editor))
+  wrapped_eval(
+    (editor) -> editor.getSelectedBufferRange(),
+    (editor,_) -> EditorUtils.getClojureVarUnderCursor(editor),
+    (code) -> wrap_in_rebl_submit("#'" + code)
   )
 
 # Inspect editor's current namespace in REBL (as a Var so you can navigate it).
 atom.commands.add 'atom-text-editor', 'sean:inspect-ns', ->
-  editor = atom.workspace.getActiveTextEditor()
-  chlorine = atom.packages.getLoadedPackage('chlorine').mainModule
-  ns = EditorUtils.findNsDeclaration(editor)
-  chlorine.repl.eval_and_present(
-    editor,
-    ns,
-    editor.getPath(),
-    editor.getSelectedBufferRange(),
-    wrap_in_rebl_submit("(find-ns '" + ns + ")")
+  wrapped_eval(
+    (editor) -> editor.getSelectedBufferRange(),
+    (editor,_) -> EditorUtils.findNsDeclaration(editor),
+    (code) -> wrap_in_rebl_submit("(find-ns '" + code + ")")
   )
