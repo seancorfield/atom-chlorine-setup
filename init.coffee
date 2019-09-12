@@ -116,11 +116,11 @@ atom.commands.add 'atom-text-editor', 'sean:inspect-ns', ->
     (code) -> wrap_in_rebl_submit("(find-ns '" + code + ")")
   )
 
-# Pull up javadocs in REBL for symbol at cursor.
+# Pull up javadocs in REBL for selected code or symbol at cursor.
 atom.commands.add 'atom-text-editor', 'sean:inspect-java', ->
   wrapped_eval(
     (editor) -> editor.getSelectedBufferRange(),
-    (editor,_) -> EditorUtils.getClojureVarUnderCursor(editor),
+    (editor,_) -> editor.getSelectedText() || EditorUtils.getClojureVarUnderCursor(editor),
     (code) -> wrap_in_rebl_submit(
       "(let [c-o-o " + code +
         "^Class c (if (instance? Class c-o-o) c-o-o (class c-o-o))] " +
