@@ -115,3 +115,16 @@ atom.commands.add 'atom-text-editor', 'sean:inspect-ns', ->
     (editor,_) -> EditorUtils.findNsDeclaration(editor),
     (code) -> wrap_in_rebl_submit("(find-ns '" + code + ")")
   )
+
+# Pull up javadocs in REBL for symbol at cursor.
+atom.commands.add 'atom-text-editor', 'sean:inspect-java', ->
+  wrapped_eval(
+    (editor) -> editor.getSelectedBufferRange(),
+    (editor,_) -> EditorUtils.getClojureVarUnderCursor(editor),
+    (code) -> wrap_in_rebl_submit(
+      "(let [c-o-o " + code +
+        "^Class c (if (instance? Class c-o-o) c-o-o (class c-o-o))] " +
+          "(java.net.URL. " +
+            "((requiring-resolve 'clojure.java.javadoc/javadoc-url) (.getName c))))"
+    )
+  )

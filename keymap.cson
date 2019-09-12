@@ -41,6 +41,7 @@
   'ctrl-; D':       'sean:def-binding'
   'ctrl-; e':       'chlorine:disconnect'
   'ctrl-; f':       'chlorine:load-file'
+  'ctrl-; j':       'sean:inspect-java'
   'ctrl-; k':       'chlorine:clear-console'
   'ctrl-; n':       'sean:inspect-ns'
   'ctrl-; s':       'sean:inspect-selection'
