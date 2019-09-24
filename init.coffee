@@ -57,55 +57,55 @@ wrap_in_rebl_submit = (code) ->
 # This waits for the package to load
 atom.packages.activatePackage('chlorine').then (pkg) ->
   # This picks up the "main module" of the package
-  pkg = pkg.mainModule
+  chlorine = pkg.mainModule
 
   # Like Chlorine's evaluate-top-block, but sends it to REBL.
   atom.commands.add 'atom-text-editor', 'sean:inspect-top-block', ->
-    result = pkg.ext.get_top_block()
+    result = chlorine.ext.get_top_block()
     if result.text
       cmd = wrap_in_rebl_submit result.text
-      pkg.ext.evaluate_and_present cmd, result.range
+      chlorine.ext.evaluate_and_present cmd, result.range
 
   # Like Chlorine's evaluate-block, but sends it to REBL.
   atom.commands.add 'atom-text-editor', 'sean:inspect-block', ->
-    result = pkg.ext.get_block()
+    result = chlorine.ext.get_block()
     if result.text
       cmd = wrap_in_rebl_submit result.text
-      pkg.ext.evaluate_and_present cmd, result.range
+      chlorine.ext.evaluate_and_present cmd, result.range
 
   # Like Chlorine's evaluate-selection, but sends it to REBL.
   atom.commands.add 'atom-text-editor', 'sean:inspect-selection', ->
-    result = pkg.ext.get_selection()
+    result = chlorine.ext.get_selection()
     if result.text
       cmd = wrap_in_rebl_submit result.text
-      pkg.ext.evaluate_and_present cmd, result.range
+      chlorine.ext.evaluate_and_present cmd, result.range
 
   # Turn varname (expr) into a top-level def to make debugging easier.
   atom.commands.add 'atom-text-editor', 'sean:def-binding', ->
-    result = pkg.ext.get_selection()
+    result = chlorine.ext.get_selection()
     if result.text
       cmd = wrap_in_rebl_submit("(def " + result.text + ")")
-      pkg.ext.evaluate_and_present cmd, result.range
+      chlorine.ext.evaluate_and_present cmd, result.range
 
   # Send Var at cursor to REBL (as a Var so you can navigate it).
   atom.commands.add 'atom-text-editor', 'sean:inspect-var', ->
-    result = pkg.ext.get_var()
+    result = chlorine.ext.get_var()
     if result.text
       cmd = wrap_in_rebl_submit("#'" + result.text)
-      pkg.ext.evaluate_and_present cmd, result.range
+      chlorine.ext.evaluate_and_present cmd, result.range
 
   # Inspect editor's current namespace in REBL (as a Var so you can navigate it).
   atom.commands.add 'atom-text-editor', 'sean:inspect-ns', ->
-    result = pkg.ext.get_namespace()
+    result = chlorine.ext.get_namespace()
     if result.text
       cmd = wrap_in_rebl_submit("(find-ns '" + result.text + ")")
-      pkg.ext.evaluate_and_present cmd, result.range
+      chlorine.ext.evaluate_and_present cmd, result.range
 
   # Pull up javadocs in REBL for selected code or symbol at cursor.
   atom.commands.add 'atom-text-editor', 'sean:inspect-java', ->
-    result = pkg.ext.get_selection()
+    result = chlorine.ext.get_selection()
     if !result.text
-      result = pkg.ext.get_var()
+      result = chlorine.ext.get_var()
     if result.text
       cmd = wrap_in_rebl_submit(
         "(let [c-o-o " + result.text +
@@ -113,4 +113,4 @@ atom.packages.activatePackage('chlorine').then (pkg) ->
             "(java.net.URL. " +
               "((requiring-resolve 'clojure.java.javadoc/javadoc-url) (.getName c))))"
       )
-      pkg.ext.evaluate_and_present cmd, result.range
+      chlorine.ext.evaluate_and_present cmd, result.range
