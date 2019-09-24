@@ -54,77 +54,63 @@ wrap_in_rebl_submit = (code) ->
     "  (catch Throwable _))" +
     " value)"
 
-EditorUtils = require("./packages/chlorine/lib/editor-utils")
+# This waits for the package to load
+atom.packages.activatePackage('chlorine').then (pkg) ->
+  # This picks up the "main module" of the package
+  pkg = pkg.mainModule
 
-wrapped_eval = (ranger, selector, wrapper) ->
-  editor = atom.workspace.getActiveTextEditor()
-  chlorine = atom.packages.getLoadedPackage('chlorine').mainModule
-  range = ranger(editor)
-  chlorine.repl.eval_and_present(
-    editor,
-    EditorUtils.findNsDeclaration(editor),
-    editor.getPath(),
-    range,
-    wrapper(selector(editor,range))
-  )
+  # Like Chlorine's evaluate-top-block, but sends it to REBL.
+  atom.commands.add 'atom-text-editor', 'sean:inspect-top-block', ->
+    result = pkg.ext.get_top_block()
+    if result.text
+      cmd = wrap_in_rebl_submit result.text
+      pkg.ext.evaluate_and_present cmd, result.range
 
-# Like Chlorine's evaluate-top-block, but sends it to REBL.
-atom.commands.add 'atom-text-editor', 'sean:inspect-top-block', ->
-  wrapped_eval(
-    (editor) -> EditorUtils.getCursorInBlockRange(editor,{topLevel:true}),
-    (editor,range) -> editor.getTextInBufferRange(range),
-    (code) -> wrap_in_rebl_submit(code)
-  )
+  # Like Chlorine's evaluate-block, but sends it to REBL.
+  atom.commands.add 'atom-text-editor', 'sean:inspect-block', ->
+    result = pkg.ext.get_block()
+    if result.text
+      cmd = wrap_in_rebl_submit result.text
+      pkg.ext.evaluate_and_present cmd, result.range
 
-# Like Chlorine's evaluate-block, but sends it to REBL.
-atom.commands.add 'atom-text-editor', 'sean:inspect-block', ->
-  wrapped_eval(
-    (editor) -> EditorUtils.getCursorInBlockRange(editor),
-    (editor,range) -> editor.getTextInBufferRange(range),
-    (code) -> wrap_in_rebl_submit(code)
-  )
+  # Like Chlorine's evaluate-selection, but sends it to REBL.
+  atom.commands.add 'atom-text-editor', 'sean:inspect-selection', ->
+    result = pkg.ext.get_selection()
+    if result.text
+      cmd = wrap_in_rebl_submit result.text
+      pkg.ext.evaluate_and_present cmd, result.range
 
-# Like Chlorine's evaluate-selection, but sends it to REBL.
-atom.commands.add 'atom-text-editor', 'sean:inspect-selection', ->
-  wrapped_eval(
-    (editor) -> editor.getSelectedBufferRange(),
-    (editor,_) -> editor.getSelectedText(),
-    (code) -> wrap_in_rebl_submit(code)
-  )
+  # Turn varname (expr) into a top-level def to make debugging easier.
+  atom.commands.add 'atom-text-editor', 'sean:def-binding', ->
+    result = pkg.ext.get_selection()
+    if result.text
+      cmd = wrap_in_rebl_submit("(def " + result.text + ")")
+      pkg.ext.evaluate_and_present cmd, result.range
 
-# Turn varname (expr) into a top-level def to make debugging easier.
-atom.commands.add 'atom-text-editor', 'sean:def-binding', ->
-  wrapped_eval(
-    (editor) -> editor.getSelectedBufferRange(),
-    (editor,_) -> editor.getSelectedText(),
-    (code) -> wrap_in_rebl_submit("(def " + code + ")")
-  )
+  # Send Var at cursor to REBL (as a Var so you can navigate it).
+  atom.commands.add 'atom-text-editor', 'sean:inspect-var', ->
+    result = pkg.ext.get_var()
+    if result.text
+      cmd = wrap_in_rebl_submit("#'" + result.text)
+      pkg.ext.evaluate_and_present cmd, result.range
 
-# Send Var at cursor to REBL (as a Var so you can navigate it).
-atom.commands.add 'atom-text-editor', 'sean:inspect-var', ->
-  wrapped_eval(
-    (editor) -> editor.getSelectedBufferRange(),
-    (editor,_) -> EditorUtils.getClojureVarUnderCursor(editor),
-    (code) -> wrap_in_rebl_submit("#'" + code)
-  )
+  # Inspect editor's current namespace in REBL (as a Var so you can navigate it).
+  atom.commands.add 'atom-text-editor', 'sean:inspect-ns', ->
+    result = pkg.ext.get_namespace()
+    if result.text
+      cmd = wrap_in_rebl_submit("(find-ns '" + result.text + ")")
+      pkg.ext.evaluate_and_present cmd, result.range
 
-# Inspect editor's current namespace in REBL (as a Var so you can navigate it).
-atom.commands.add 'atom-text-editor', 'sean:inspect-ns', ->
-  wrapped_eval(
-    (editor) -> editor.getSelectedBufferRange(),
-    (editor,_) -> EditorUtils.findNsDeclaration(editor),
-    (code) -> wrap_in_rebl_submit("(find-ns '" + code + ")")
-  )
-
-# Pull up javadocs in REBL for selected code or symbol at cursor.
-atom.commands.add 'atom-text-editor', 'sean:inspect-java', ->
-  wrapped_eval(
-    (editor) -> editor.getSelectedBufferRange(),
-    (editor,_) -> editor.getSelectedText() || EditorUtils.getClojureVarUnderCursor(editor),
-    (code) -> wrap_in_rebl_submit(
-      "(let [c-o-o " + code +
-        "^Class c (if (instance? Class c-o-o) c-o-o (class c-o-o))] " +
-          "(java.net.URL. " +
-            "((requiring-resolve 'clojure.java.javadoc/javadoc-url) (.getName c))))"
-    )
-  )
+  # Pull up javadocs in REBL for selected code or symbol at cursor.
+  atom.commands.add 'atom-text-editor', 'sean:inspect-java', ->
+    result = pkg.ext.get_selection()
+    if !result.text
+      result = pkg.ext.get_var()
+    if result.text
+      cmd = wrap_in_rebl_submit(
+        "(let [c-o-o " + result.text +
+          "^Class c (if (instance? Class c-o-o) c-o-o (class c-o-o))] " +
+            "(java.net.URL. " +
+              "((requiring-resolve 'clojure.java.javadoc/javadoc-url) (.getName c))))"
+      )
+      pkg.ext.evaluate_and_present cmd, result.range
