@@ -101,6 +101,13 @@ atom.packages.activatePackage('chlorine').then (pkg) ->
       cmd = wrap_in_rebl_submit("(find-ns '" + result.text + ")")
       Cl.ext.evaluate_and_present cmd, result.range
 
+  # Remove editor's current namespace (to recover from bad/changed aliases etc).
+  atom.commands.add 'atom-text-editor', 'sean:remove-ns', ->
+    result = Cl.ext.get_namespace()
+    if result.text
+      cmd = wrap_in_rebl_submit("(remove-ns '" + result.text + ")")
+      Cl.ext.evaluate_and_present cmd, result.range
+
   # Pull up javadocs in REBL for selected code or symbol at cursor.
   atom.commands.add 'atom-text-editor', 'sean:inspect-java', ->
     result = Cl.ext.get_selection()
