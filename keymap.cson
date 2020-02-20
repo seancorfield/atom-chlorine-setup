@@ -43,6 +43,7 @@
   'ctrl-; f':       'chlorine:load-file'
   'ctrl-; j':       'sean:inspect-java'
   'ctrl-; k':       'chlorine:clear-console'
+  'ctrl-; K':       'chlorine:clear-inline-results'
   'ctrl-; n':       'sean:inspect-ns'
   'ctrl-; R':       'sean:remove-ns'
   'ctrl-; s':       'sean:inspect-selection'
