@@ -54,3 +54,6 @@
   'ctrl-; y':       'chlorine:connect-socket-repl'
   #'ctrl-; y':       'chlorine:connect-clojure-socket-repl'
   'ctrl-; .':       'chlorine:go-to-var-definition'
+
+  # linter-related
+  'alt-; n':        'linter-ui-default:next'
