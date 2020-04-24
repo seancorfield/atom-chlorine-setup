@@ -105,7 +105,17 @@ atom.packages.activatePackage('chlorine').then (pkg) ->
   atom.commands.add 'atom-text-editor', 'sean:remove-ns', ->
     result = Cl.ext.get_namespace()
     if result.text
-      cmd = wrap_in_rebl_submit("(remove-ns '" + result.text + ")")
+      atom.notifications.addInfo("Removing...",{detail:result.text})
+      cmd = "(remove-ns '" + result.text + ")"
+      Cl.ext.evaluate_and_present cmd, result.range
+
+  # Require with reload all the editor's current namespace.
+  atom.commands.add 'atom-text-editor', 'sean:reload-ns-all', ->
+    result = Cl.ext.get_namespace()
+    if result.text
+      atom.notifications.addInfo("Reloading all...",{detail:result.text})
+      cmd = "(do (require '" + result.text + " :reload-all) " +
+        "(println '" + result.text + " 'reloaded!))"
       Cl.ext.evaluate_and_present cmd, result.range
 
   # Pull up javadocs in REBL for selected code or symbol at cursor.
