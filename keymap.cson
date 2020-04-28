@@ -58,3 +58,6 @@
 
   # linter-related
   'alt-; n':        'linter-ui-default:next'
+
+  # paredit:
+  'enter':          'lisp-paredit:newline'
