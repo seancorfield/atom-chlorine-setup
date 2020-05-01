@@ -131,3 +131,13 @@ atom.packages.activatePackage('chlorine').then (pkg) ->
               "((requiring-resolve 'clojure.java.javadoc/javadoc-url) (.getName c))))"
       )
       Cl.ext.evaluate_and_present cmd, result.range
+
+  # Pull ClojureDocs in REBL for symbol at cursor, if known.
+  atom.commands.add 'atom-text-editor', 'sean:clojuredoc-var', ->
+    result = Cl.ext.get_var()
+    if result.text
+      cmd = wrap_in_rebl_submit(
+        "(java.net.URL. " +
+          "(str \"http://clojuredocs.org/\" " +
+            "(symbol #'" + result.text + ")))")
+      Cl.ext.evaluate_and_present cmd, result.range

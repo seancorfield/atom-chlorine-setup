@@ -53,7 +53,7 @@
   'ctrl-; v':       'sean:inspect-var'
   'ctrl-; x':       'chlorine:run-tests-in-ns'
   'ctrl-; y':       'chlorine:connect-socket-repl'
-  #'ctrl-; y':       'chlorine:connect-clojure-socket-repl'
+  'ctrl-; ?':       'sean:clojuredoc-var'
   'ctrl-; .':       'chlorine:go-to-var-definition'
 
   # linter-related
