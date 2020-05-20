@@ -46,7 +46,7 @@
   'ctrl-; K':       'chlorine:clear-inline-results'
   'ctrl-; n':       'chlorine:rebl-ns'
   'ctrl-; r':       'chlorine:rebl-remove-ns'
-  'ctrl-; R':       'chlorine:rebl-reload-ns-all'
+  'ctrl-; R':       'chlorine:rebl-reload-all-ns'
   'ctrl-; s':       'chlorine:rebl-selection'
   'ctrl-; S':       'chlorine:source-for-var'
   'ctrl-; t':       'chlorine:run-test-for-var'
