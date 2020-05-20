@@ -1,8 +1,9 @@
 # Atom/Chlorine Setup
 
-The files here represent my current [Atom](https://atom.io/) configuration for use with [Chlorine](https://atom.io/packages/chlorine) **version 0.6.1 or later** (since it relies on the recently-added experimental ClojureScript extension feature).
+The files here represent my current [Atom](https://atom.io/) configuration for use with [Chlorine](https://atom.io/packages/chlorine) **version 0.7.1 or later** (since it relies on the recently-added _experimental_ ClojureScript extension feature).
 
-* `init.coffee` primarily contains REBL-specific commands to inspect Vars and namespaces,
+* `chlorine-config.cljs` contains all my REBL-specific enhancements,
+* `init.coffee` contains some extended paredit features,
 * `keymap.cson` is my cross-platform key mappings for Chlorine and those REBL commands.
 
 ## Keymap
