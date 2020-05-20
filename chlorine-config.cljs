@@ -54,26 +54,29 @@
           (editor/eval-and-render)))))
 
 (defn rebl-remove-ns []
-  (let [block (editor/get-namespace)]
+  (let [block (editor/get-namespace)
+        here  (editor/get-selection)]
     (when (seq (:text block))
+      (editor/run-callback
+       :notify
+       {:type :info :title "Removing..." :message (:text block)})
       (-> block
-          (update :text
-                  #(str
-                    "(do (println 'Removing '" % "\"...\")"
-                    " (remove-ns '" % "))"))
+          (update :text #(str "(remove-ns '" % ")"))
           (update :text wrap-in-rebl-submit)
+          (assoc :range (:range here))
           (editor/eval-and-render)))))
 
 (defn rebl-reload-all-ns []
-  (let [block (editor/get-namespace)]
+  (let [block (editor/get-namespace)
+        here  (editor/get-selection)]
     (when (seq (:text block))
+      (editor/run-callback
+       :notify
+       {:type :info :title "Reloading all..." :message (:text block)})
       (-> block
-          (update :text
-                  #(str
-                    "(do (println 'Reloading '" % "\"...\")"
-                    " (require '" % " :reload-all)"
-                    " (println \"...\" '" % " 'reloaded))"))
+          (update :text #(str "(require '" % " :reload-all)"))
           (update :text wrap-in-rebl-submit)
+          (assoc :range (:range here))
           (editor/eval-and-render)))))
 
 (defn rebl-doc-var []
