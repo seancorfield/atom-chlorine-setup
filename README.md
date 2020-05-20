@@ -1,6 +1,6 @@
 # Atom/Chlorine Setup
 
-The files here represent my current [Atom](https://atom.io/) configuration for use with [Chlorine](https://atom.io/packages/chlorine) **version 0.5.0 or later** (since it relies on the recently-added extension points).
+The files here represent my current [Atom](https://atom.io/) configuration for use with [Chlorine](https://atom.io/packages/chlorine) **version 0.6.1 or later** (since it relies on the recently-added experimental ClojureScript extension feature).
 
 * `init.coffee` primarily contains REBL-specific commands to inspect Vars and namespaces,
 * `keymap.cson` is my cross-platform key mappings for Chlorine and those REBL commands.
@@ -31,10 +31,17 @@ The REBL-specific commands _require_ Clojure 1.10 and will fail on earlier versi
 * `ctrl-; ?` -- for the var at the cursor, display the ClojureDocs web page for it in REBL (assumes the symbol is part of Clojure itself).
 * `ctrl-; .` -- Chlorine's built-in go to var definition.
 
+### Extended Paredit
+
+* `alt-; c` -- copy current s-expression
+* `alt-; v` -- paste over current s-expression
+* `alt-; x` -- cut current s-expression
+* `alt-; backspace` -- delete current s-expression
+
 ### Linter   
 
 * `alt-; n` -- jump to the linter's next warning.
 
 ### Miscellaneous
 
-* `enter` -- Paredit's `newline` command (you probably don't need this -- I added it because I )
+* `enter` -- Paredit's `newline` command (you probably don't need this -- I added it because it seemed to disappear after an update to Paredit)
