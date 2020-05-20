@@ -97,7 +97,6 @@
           (editor/eval-and-render)))))
 
 (defn rebl-javadoc []
-  ;; this should be either selection or var
   (let [block (editor/get-selection)
         block (if (< 1 (count (:text block))) block (editor/get-var))]
       (when (seq (:text block))
