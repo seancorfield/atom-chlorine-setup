@@ -7,3 +7,5 @@ storage
 packages
 config.cson
 github.cson
+snippets.cson
+styles.less
