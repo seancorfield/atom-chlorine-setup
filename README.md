@@ -6,6 +6,27 @@ The files here represent my current [Atom](https://atom.io/) configuration for u
 * `init.coffee` contains some extended paredit features,
 * `keymap.cson` is my cross-platform key mappings for Chlorine and those REBL commands.
 
+## Installation
+
+You can either clone this repo into a temporary directory and then copy those three files into your `~/.atom` directory (overwriting the default `init.coffee` and `keymap.cson` files and any Chlorine config file you may have already created), or you can clone it on top of your existing `~/.atom` so that you can keep it updated to match this repo by pulling new changes as desired:
+
+```bash
+$ cd ~/.atom
+$ git init
+$ git remote add origin https://github.com/seancorfield/atom-chlorine-setup.git
+$ git fetch
+$ git checkout master -f
+```
+
+That last line will overwrite any existing versions of those three files.
+
+To update your files to the latest versions from this repo:
+
+```bash
+$ cd ~/.atom
+$ git pull
+```
+
 ## Keymap
 
 The REBL-specific commands _require_ Clojure 1.10 and will fail on earlier versions. Since REBL depends on `datafy`/`nav` in Clojure 1.10, this seemed like a reasonable baseline to me. If you need to work on an earlier project, you'll need to use Chlorine's default versions of the commands.
