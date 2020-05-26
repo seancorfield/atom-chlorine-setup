@@ -46,11 +46,13 @@
           (editor/eval-and-render)))))
 
 (defn rebl-ns []
-  (let [block (editor/get-namespace)]
+  (let [block (editor/get-namespace)
+        here  (editor/get-selection)]
     (when (seq (:text block))
       (-> block
           (update :text #(str "(find-ns '" % ")"))
           (update :text wrap-in-rebl-submit)
+          (assoc :range (:range here))
           (editor/eval-and-render)))))
 
 (defn rebl-remove-ns []
@@ -73,11 +75,18 @@
       (editor/run-callback
        :notify
        {:type :info :title "Reloading all..." :message (:text block)})
-      (-> block
-          (update :text #(str "(require '" % " :reload-all)"))
-          (update :text wrap-in-rebl-submit)
-          (assoc :range (:range here))
-          (editor/eval-and-render)))))
+      (let [res (editor/eval-and-render
+                  (-> block
+                      (update :text #(str "(require '" % " :reload-all)"))
+                      (update :text wrap-in-rebl-submit)
+                      (assoc :range (:range here))))]
+        (editor/run-callback
+         :notify
+         {:type (if (:error res) :warn :info)
+          :title (if (:error res)
+                   "Reload failed for..."
+                   "Reload succeeded!")
+          :message (:text block)})))))
 
 (defn rebl-doc-var []
   (let [block (editor/get-var)]
