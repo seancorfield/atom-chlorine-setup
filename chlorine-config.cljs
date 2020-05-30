@@ -8,28 +8,28 @@
        " value)"))
 
 (defn rebl-top-block []
-  (let [block (editor/get-top-block)]
+  (p/let [block (editor/get-top-block)]
     (when (seq (:text block))
       (-> block
           (update :text wrap-in-rebl-submit)
           (editor/eval-and-render)))))
 
 (defn rebl-block []
-  (let [block (editor/get-block)]
+  (p/let [block (editor/get-block)]
     (when (seq (:text block))
       (-> block
           (update :text wrap-in-rebl-submit)
           (editor/eval-and-render)))))
 
 (defn rebl-selection []
-  (let [block (editor/get-selection)]
+  (p/let [block (editor/get-selection)]
     (when (seq (:text block))
       (-> block
           (update :text wrap-in-rebl-submit)
           (editor/eval-and-render)))))
 
 (defn rebl-def-var []
-  (let [block (editor/get-selection)]
+  (p/let [block (editor/get-selection)]
     (when (seq (:text block))
       (-> block
           (update :text
@@ -38,7 +38,7 @@
           (editor/eval-and-render)))))
 
 (defn rebl-var []
-  (let [block (editor/get-var)]
+  (p/let [block (editor/get-var)]
     (when (seq (:text block))
       (-> block
           (update :text #(str "#'" %))
@@ -46,8 +46,8 @@
           (editor/eval-and-render)))))
 
 (defn rebl-ns []
-  (let [block (editor/get-namespace)
-        here  (editor/get-selection)]
+  (p/let [block (editor/get-namespace)
+          here  (editor/get-selection)]
     (when (seq (:text block))
       (-> block
           (update :text #(str "(find-ns '" % ")"))
@@ -56,8 +56,8 @@
           (editor/eval-and-render)))))
 
 (defn rebl-remove-ns []
-  (let [block (editor/get-namespace)
-        here  (editor/get-selection)]
+  (p/let [block (editor/get-namespace)
+          here  (editor/get-selection)]
     (when (seq (:text block))
       (editor/run-callback
        :notify
@@ -69,17 +69,17 @@
           (editor/eval-and-render)))))
 
 (defn rebl-reload-all-ns []
-  (let [block (editor/get-namespace)
-        here  (editor/get-selection)]
+  (p/let [block (editor/get-namespace)
+          here  (editor/get-selection)]
     (when (seq (:text block))
       (editor/run-callback
        :notify
        {:type :info :title "Reloading all..." :message (:text block)})
-      (let [res (editor/eval-and-render
-                  (-> block
-                      (update :text #(str "(require '" % " :reload-all)"))
-                      (update :text wrap-in-rebl-submit)
-                      (assoc :range (:range here))))]
+      (p/let [res (editor/eval-and-render
+                    (-> block
+                        (update :text #(str "(require '" % " :reload-all)"))
+                        (update :text wrap-in-rebl-submit)
+                        (assoc :range (:range here))))]
         (editor/run-callback
          :notify
          {:type (if (:error res) :warn :info)
@@ -89,7 +89,7 @@
           :message (:text block)})))))
 
 (defn rebl-doc-var []
-  (let [block (editor/get-var)]
+  (p/let [block (editor/get-var)]
     (when (seq (:text block))
       (-> block
           (update :text
@@ -106,8 +106,8 @@
           (editor/eval-and-render)))))
 
 (defn rebl-javadoc []
-  (let [block (editor/get-selection)
-        block (if (< 1 (count (:text block))) block (editor/get-var))]
+  (p/let [block (editor/get-selection)
+          block (if (< 1 (count (:text block))) block (editor/get-var))]
       (when (seq (:text block))
         (-> block
             (update :text
