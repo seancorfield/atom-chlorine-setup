@@ -2,9 +2,10 @@
 
 (defn- wrap-in-rebl-submit [code]
   (str "(let [value " code "] "
+       "(when-let [rr (resolve 'requiring-resolve)] "
        "(try"
-       "  ((requiring-resolve 'cognitect.rebl/submit) '" code " value)"
-       "  (catch Throwable _))"
+       "  ((rr 'cognitect.rebl/submit) '" code " value)"
+       "  (catch Throwable _)))"
        " value)"))
 
 (defn rebl-top-block []
