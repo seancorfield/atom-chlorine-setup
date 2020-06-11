@@ -49,6 +49,7 @@ The REBL-specific commands _require_ Clojure 1.10 and will fail on earlier versi
 * `ctrl-; t` -- Chlorine's built-in run test for var.
 * `ctrl-; v` -- inspect the current symbol in REBL (as a var).
 * `ctrl-; x` -- Chlorine's built-in run tests in (current) namespace.
+* `ctrl-; X` -- If the current namespace is `foo.bar`, attempt to run tests in either `foo.bar-test` or `foo.bar-expectations`, display the test results in a popup (as per Chlorine's built-in test runner), display that summary inline as a hash map, and submit it to REBL.
 * `ctrl-; y` -- Chlorine's built-in connect to Socket REPL.
 * `ctrl-; ?` -- for the var at the cursor, display the ClojureDocs web page for it in REBL (assumes the symbol is part of Clojure itself).
 * `ctrl-; .` -- Chlorine's built-in go to var definition.

@@ -52,6 +52,7 @@
   'ctrl-; t':       'chlorine:run-test-for-var'
   'ctrl-; v':       'chlorine:rebl-var'
   'ctrl-; x':       'chlorine:run-tests-in-ns'
+  'ctrl-; X':       'chlorine:rebl-run-side-tests'
   'ctrl-; y':       'chlorine:connect-socket-repl'
   'ctrl-; ?':       'chlorine:rebl-doc-var'
   'ctrl-; .':       'chlorine:go-to-var-definition'

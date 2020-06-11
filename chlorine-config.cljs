@@ -89,6 +89,42 @@
                    "Reload succeeded!")
           :message (:text block)})))))
 
+(defn- format-test-result [{:keys [test pass fail error]}]
+  (str "Ran " test " test"
+       (when-not (= 1 test) "s")
+       (when-not (zero? pass)
+         (str ", " pass " assertion"
+              (when-not (= 1 pass) "s")
+              " passed"))
+       (when-not (zero? fail)
+         (str ", " fail " failed"))
+       (when-not (zero? error)
+         (str ", " error " errored"))
+       "."))
+
+(defn rebl-run-side-tests []
+  (p/let [block (editor/get-namespace)
+          here  (editor/get-selection)]
+    (when (seq (:text block))
+      (p/let [res (editor/eval-and-render
+                    (-> block
+                        (update :text (fn [s] (str "
+                          (some #(try
+                                   (let [nt (symbol (str \"" s "\" \"-\" %))]
+                                     (require nt)
+                                     (clojure.test/run-tests nt))
+                                  (catch Throwable _))
+                                [\"test\" \"expectations\"])")))
+                        (update :text wrap-in-rebl-submit)
+                        (assoc :range (:range here))))]
+        (editor/run-callback
+         :notify
+         {:type (if (:error res) :warn :info)
+          :title (if (:error res)
+                   "Failed to run tests for..."
+                   "Tests completed!")
+          :message (if (:error res) (:text block) (format-test-result (:result res)))})))))
+
 (defn rebl-doc-var []
   (p/let [block (editor/get-var)]
     (when (seq (:text block))
