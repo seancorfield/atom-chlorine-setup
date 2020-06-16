@@ -15,7 +15,7 @@ $ cd ~/.atom
 $ git init
 $ git remote add origin https://github.com/seancorfield/atom-chlorine-setup.git
 $ git fetch
-$ git checkout master -f
+$ git checkout develop -f
 ```
 
 That last line will overwrite any existing versions of those three files.
