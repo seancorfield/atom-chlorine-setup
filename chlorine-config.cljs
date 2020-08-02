@@ -4,7 +4,7 @@
   (str "(let [value " code
        "      rr      (try (resolve 'requiring-resolve) (catch Throwable _))]"
        "  (if-let [rs (try (rr 'cognitect.rebl/submit) (catch Throwable _))]"
-       "    (rs " code " value)"
+       "    (rs '" code " value)"
        "    (tap> value))"
        "  value)"))
 
