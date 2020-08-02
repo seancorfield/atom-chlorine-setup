@@ -29,7 +29,9 @@ $ git pull
 
 ## Keymap
 
-The REBL-specific commands _require_ Clojure 1.10 and will fail on earlier versions. Since REBL depends on `datafy`/`nav` in Clojure 1.10, this seemed like a reasonable baseline to me. If you need to work on an earlier project, you'll need to use Chlorine's default versions of the commands.
+The REBL-specific commands _require_ Clojure 1.10 and will fail on earlier versions. If REBL is not on the classpath, these commands will all `tap>` the results, which will work with [Reveal](https://github.com/vlaaad/reveal).
+
+Since REBL depends on `datafy`/`nav` in Clojure 1.10, this seemed like a reasonable baseline to me. If you need to work on an earlier project, you'll need to use Chlorine's default versions of the commands.
 
 * `ctrl-; b` -- evaluate current form into REBL.
 * `ctrl-; B` -- evaluate current top-level form into REBL.
