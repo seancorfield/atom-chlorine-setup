@@ -60,11 +60,12 @@
   # linter-related
   'alt-; n':        'linter-ui-default:next'
 
-  # paredit:
-  'enter':          'lisp-paredit:newline'
-
   # jason paredit-type stuff from my init.coffee file
   'alt-; c':        'jason:copy-sexp'
   'alt-; backspace':'jason:delete-sexp'
   'alt-; v':        'jason:paste-sexp'
   'alt-; x':        'jason:cut-sexp'
+
+'atom-text-editor[data-grammar="clojure"]':
+  # paredit:
+  'enter':          'lisp-paredit:newline'
