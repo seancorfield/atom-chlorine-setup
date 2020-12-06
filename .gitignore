@@ -4,6 +4,7 @@
 blob-store
 compile-cache
 storage
+recovery
 packages
 config.cson
 github.cson
